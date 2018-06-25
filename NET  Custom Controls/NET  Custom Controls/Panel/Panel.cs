@@ -13,61 +13,74 @@ using System.Drawing.Drawing2D;
 namespace NET__Custom_Controls.Panel
 {
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design", typeof(IDesigner))]
-    public partial class Panel : UserControl
+    public partial class Panel : BasicElements.GradientElement
     {
         public Panel()
         {
             InitializeComponent();
         }
 
-        [Category("Appearance")]
-        [Description("Select Color Mode")]
-        public ColorMode ColorMode
-        {
-            get { return _ColorMode; }
-            set { _ColorMode = value; Invalidate(); }
-        }
-        protected ColorMode _ColorMode = ColorMode.Solid;
+        #region Drag Form
+        [Category("Drag")]
+        public bool EnableFormDragging { get; set; } = false;
+        [Category("Drag")]
+        public Form FormToDrag { get; set; }
 
-        [Category("Appearance")]
-        [Description("Select Color Direction for Gradient Color Mode")]
-        public LinearGradientMode GradientColorDirection
-        {
-            get { return _GradientColorDirection; }
-            set { _GradientColorDirection = value; Invalidate(); }
-        }
-        protected LinearGradientMode _GradientColorDirection = LinearGradientMode.Vertical;
+        private bool Drag = false;
 
-        public GradientTheme.Theme Theme
+        private Point InitialFormPosition;
+        private Point CurrentFormPosition
         {
-            get { return _Theme; }
-            set { _Theme = value; GradientColorList = GradientTheme.GetTheme(value); }
+            get { return FormToDrag.Location; }
         }
-        protected GradientTheme.Theme _Theme = GradientTheme.Theme.Custom;
-
-        [Category("Appearance")]
-        [Browsable(true)]
-        [Description("Colors used for Gradient Color Mode")]
-        public GradientColor[] GradientColorList
+        private Point InitialMousePosition;
+        private Point CurrentMousePosition
         {
-            get { return _BackColorList; }
-            set { _BackColorList = value; _ColorMode = ColorMode.Gradient; Invalidate(); }
+            get { return Cursor.Position; }
         }
-        protected GradientColor[] _BackColorList;
+       
+        private Point PositionDifference;
 
-        protected override void OnPaint(PaintEventArgs e)
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            switch (ColorMode)
+            if (e.Button == MouseButtons.Left && EnableFormDragging && FormToDrag != null)
             {
-                case ColorMode.Solid:
-                    Designer.FillRectangleSolid(e, BackColor, new Rectangle(0, 0, Width, Height));
-                    break;
-                case ColorMode.Gradient:
-                    if (!Designer.FillRectangleGradient(e, GradientColorList, GradientColorDirection, new Rectangle(0, 0, Width, Height)))
-                        ColorMode = ColorMode.Solid;
-                    break;
+                InitialMousePosition = CurrentMousePosition;
+                InitialFormPosition = CurrentFormPosition;
+                Drag = true;
             }
         }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                Drag = false;
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (Drag && EnableFormDragging)
+            {
+                PositionDifference = new Point(CurrentMousePosition.X - InitialMousePosition.X, CurrentMousePosition.Y - InitialMousePosition.Y);
+                FormToDrag.Location = new Point(
+                    InitialFormPosition.X + PositionDifference.X,
+                    InitialFormPosition.Y + PositionDifference.Y
+                );
+            }
+        }
+        #endregion
+
+        //protected override void OnPaint(PaintEventArgs e)
+        //{
+        //    switch (ColorMode)
+        //    {
+        //        case ColorMode.Solid:
+        //            Designer.FillRectangleSolid(e, BackColor, new Rectangle(0, 0, Width, Height));
+        //            break;
+        //        case ColorMode.Gradient:
+        //            if (!Designer.FillRectangleGradient(e, GradientColorList, GradientColorDirection, new Rectangle(0, 0, Width, Height)))
+        //                ColorMode = ColorMode.Solid;
+        //            break;
+        //    }
+        //}
 
 
     }

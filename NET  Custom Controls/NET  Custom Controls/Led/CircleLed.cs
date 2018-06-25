@@ -17,12 +17,14 @@ namespace NET__Custom_Controls.Led
             InitializeComponent();
             OldSize = Size;
             SetInitialTheme();
+            SetDefaultEvents();
         }
 
         private void SetInitialTheme()
         {
-
+            Theme = GradientTheme.Theme.BlueSky;
         }
+
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -39,7 +41,6 @@ namespace NET__Custom_Controls.Led
                     break;
             }
 
-            
         }
 
         private Size OldSize;

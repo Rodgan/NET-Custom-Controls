@@ -45,7 +45,7 @@ namespace NET__Custom_Controls
         public Color StatusBarHoverColor
         {
             get { return _StatusBarHoverColor; }
-            set { _StatusBarHoverColor = value; }
+            set { _StatusBarHoverColor = value; UpdateStatus(); }
         }
         private Color _StatusBarHoverColor = Color.LightSlateGray;
 
@@ -55,7 +55,7 @@ namespace NET__Custom_Controls
         public Color StatusBarActiveColor
         {
             get { return _StatusBarActiveColor; }
-            set { _StatusBarActiveColor = value; }
+            set { _StatusBarActiveColor = value; UpdateStatus(); }
         }
         private Color _StatusBarActiveColor = Color.ForestGreen;
 

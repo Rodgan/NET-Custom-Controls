@@ -68,11 +68,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicElements\EventHandlerManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BasicElements\EventHandlerManager.Designer.cs">
+      <DependentUpon>EventHandlerManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Buttons\ActivableButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Buttons\ActivableButton.Designer.cs">
       <DependentUpon>ActivableButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Buttons\Button.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Buttons\Button.Designer.cs">
+      <DependentUpon>Button.cs</DependentUpon>
     </Compile>
     <Compile Include="Buttons\OnOffButton.cs">
       <SubType>UserControl</SubType>
@@ -86,6 +98,12 @@
     </Compile>
     <Compile Include="Email\MailSender.Designer.cs">
       <DependentUpon>MailSender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BasicElements\GradientElement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BasicElements\GradientElement.Designer.cs">
+      <DependentUpon>GradientElement.cs</DependentUpon>
     </Compile>
     <Compile Include="GradientThemes.cs" />
     <Compile Include="Led\CircleLed.cs">
@@ -115,11 +133,20 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BasicElements\EventHandlerManager.resx">
+      <DependentUpon>EventHandlerManager.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Buttons\ActivableButton.resx">
       <DependentUpon>ActivableButton.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Buttons\Button.resx">
+      <DependentUpon>Button.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Buttons\OnOffButton.resx">
       <DependentUpon>OnOffButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BasicElements\GradientElement.resx">
+      <DependentUpon>GradientElement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Led\CircleLed.resx">
       <DependentUpon>CircleLed.cs</DependentUpon>

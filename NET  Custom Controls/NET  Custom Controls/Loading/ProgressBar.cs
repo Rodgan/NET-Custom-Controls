@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace NET__Custom_Controls.Loading
 {
-    public partial class ProgressBar : NET__Custom_Controls.Panel.Panel
+    public partial class ProgressBar : BasicElements.GradientElement
     {
         public ProgressBar()
         {
@@ -36,6 +36,8 @@ namespace NET__Custom_Controls.Loading
         {
             var widthToDraw = (int) ((Width / 100f) * Progress);
 
+            lblPercentage.Text = $"{Progress} %";
+
             if (widthToDraw == 0)
                 return;
 
@@ -48,7 +50,6 @@ namespace NET__Custom_Controls.Loading
                     Designer.FillRectangleGradient(e, GradientColorList, GradientColorDirection, new Rectangle(0, 0, widthToDraw, Height));
                     break;
             }
-            lblPercentage.Text = $"{Progress} %";
         }
 
         private Size OldSize;
