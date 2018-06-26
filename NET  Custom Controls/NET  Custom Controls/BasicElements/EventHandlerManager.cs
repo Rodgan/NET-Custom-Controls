@@ -26,6 +26,7 @@ namespace NET__Custom_Controls.BasicElements
             OnMouseMove(Event_MouseMove, Controls);
             OnMouseLeave(Event_MouseLeave, Controls);
             OnMouseUp(Event_MouseUp, Controls);
+            OnMouseDown(Event_MouseDown, Controls);
 
             OnClick(Event_Click, this);
             OnMouseEnter(Event_MouseEnter, this);
@@ -33,6 +34,7 @@ namespace NET__Custom_Controls.BasicElements
             OnMouseMove(Event_MouseMove, this);
             OnMouseLeave(Event_MouseLeave, this);
             OnMouseUp(Event_MouseUp, this);
+            OnMouseDown(Event_MouseDown, this);
         }
 
         public new event EventHandler Click;

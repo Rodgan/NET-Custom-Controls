@@ -10,7 +10,7 @@ using System.Windows.Forms;
 namespace NET__Custom_Controls.Led
 {
     [DefaultEvent("Click")]
-    public partial class CircleLed : Panel.Panel
+    public partial class CircleLed : BasicElements.GradientElement
     {
         public CircleLed()
         {

@@ -17,17 +17,20 @@ namespace NET__Custom_Controls.Buttons
         {
             InitializeComponent();
             SetDefaultEvents();
+            EnableThemeEffectsOnMouseEvents();
         }
 
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [Browsable(true)]
+        [Category("Appearance")]
         public override string Text
         {
             get { return lblText.Text; }
             set { lblText.Text = value; }
         }
 
+        [Category("Appearance")]
         public ContentAlignment TextAlign
         {
             get { return lblText.TextAlign; }

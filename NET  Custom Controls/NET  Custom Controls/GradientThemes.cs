@@ -21,12 +21,17 @@ namespace NET__Custom_Controls
             Lime,
             Mango,
             MidnightCity,
+            Netflix,
             OliveGreen,
+            Rainbow,
             Rastafari,
             RedFire,
+            RedBlood,
             RelaxingRed,
             RoyalBlue,
             Sky,
+            Sprite,
+            Sunrise,
             Titanium,
             WhiteApple,
             YouTube
@@ -74,6 +79,16 @@ namespace NET__Custom_Controls
                     return YouTube;
                 case Theme.OliveGreen:
                     return OliveGreen;
+                case Theme.Sprite:
+                    return Sprite;
+                case Theme.RedBlood:
+                    return RedBlood;
+                case Theme.Sunrise:
+                    return Sunrise;
+                case Theme.Rainbow:
+                    return Rainbow;
+                case Theme.Netflix:
+                    return Netflix;
                 case Theme.Custom:
                 default:
                     return null;
@@ -287,6 +302,67 @@ namespace NET__Custom_Controls
                 return new GradientColor[] {
                     new GradientColor() { Color = Color.FromArgb(121, 159, 12), Position = 0 },
                     new GradientColor() { Color = Color.FromArgb(172, 187, 120), Position = 1}
+                };
+            }
+        }
+
+        public static GradientColor[] Sprite
+        {
+            get
+            {
+                return new GradientColor[] {
+                    new GradientColor() { Color = Color.FromArgb(0, 195, 255), Position = 0 },
+                    new GradientColor() { Color = Color.FromArgb(255, 255, 28), Position = 1}
+                };
+            }
+        }
+
+        public static GradientColor[] RedBlood
+        {
+            get
+            {
+                return new GradientColor[] {
+                    new GradientColor() { Color = Color.FromArgb(248, 80, 50), Position = 0 },
+                    new GradientColor() { Color = Color.FromArgb(231, 56, 39), Position = 1}
+                };
+            }
+        }
+
+        public static GradientColor[] Sunrise
+        {
+            get
+            {
+                return new GradientColor[] {
+                    new GradientColor() { Color = Color.FromArgb(255, 95, 109), Position = 0 },
+                    new GradientColor() { Color = Color.FromArgb(255, 195, 113), Position = 1}
+                };
+            }
+        }
+
+
+        public static GradientColor[] Rainbow
+        {
+            get
+            {
+                return new GradientColor[] {
+                    new GradientColor() { Color = Color.Red, Position = 0 },
+                    new GradientColor() { Color = Color.Orange, Position = 0.2f},
+                    new GradientColor() { Color = Color.Yellow, Position = 0.4f},
+                    new GradientColor() { Color = Color.LightGreen, Position = 0.6f},
+                    new GradientColor() { Color = Color.Blue, Position = 0.8f},
+                    new GradientColor() { Color = Color.White, Position = 1},
+                };
+            }
+        }
+
+
+        public static GradientColor[] Netflix
+        {
+            get
+            {
+                return new GradientColor[] {
+                    new GradientColor() { Color = Color.FromArgb(142,14,0), Position = 0 },
+                    new GradientColor() { Color = Color.FromArgb(31,28,24), Position = 1},
                 };
             }
         }

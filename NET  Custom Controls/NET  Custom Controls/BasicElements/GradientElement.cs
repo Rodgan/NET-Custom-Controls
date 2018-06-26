@@ -19,7 +19,7 @@ namespace NET__Custom_Controls.BasicElements
             InitializeComponent();
         }
 
-        [Category("Appearance")]
+        [Category("Theme")]
         [Description("Select Color Mode")]
         public ColorMode ColorMode
         {
@@ -28,7 +28,7 @@ namespace NET__Custom_Controls.BasicElements
         }
         protected ColorMode _ColorMode = ColorMode.Solid;
 
-        [Category("Appearance")]
+        [Category("Theme")]
         [Description("Select Color Direction for Gradient Color Mode")]
         public LinearGradientMode GradientColorDirection
         {
@@ -37,23 +37,71 @@ namespace NET__Custom_Controls.BasicElements
         }
         protected LinearGradientMode _GradientColorDirection = LinearGradientMode.Vertical;
 
-        [Category("Appearance")]
+        [Category("Theme")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected GradientTheme.Theme ThemeInUse
+        {
+            get { return _ThemeInUse ?? _Theme; }
+            set { _ThemeInUse = value;}
+        }
+        protected GradientTheme.Theme? _ThemeInUse = null;
+
+        [Category("Theme")]
         public GradientTheme.Theme Theme
         {
             get { return _Theme; }
-            set { _Theme = value; GradientColorList = GradientTheme.GetTheme(value); }
+            set { _Theme = value; _ColorMode = ColorMode.Gradient; Invalidate(); }
         }
         protected GradientTheme.Theme _Theme = GradientTheme.Theme.Custom;
 
-        [Category("Appearance")]
+
+        [Category("Theme")]
+        public GradientTheme.Theme MouseUpTheme
+        {
+            get { return _MouseUpTheme ?? _Theme; }
+            set { _MouseUpTheme = value; _ColorMode = ColorMode.Gradient; }
+        }
+        protected GradientTheme.Theme? _MouseUpTheme = null;
+
+        [Category("Theme")]
+        public GradientTheme.Theme MouseDownTheme
+        {
+            get { return _MouseDownTheme ?? _Theme; }
+            set { _MouseDownTheme = value; _ColorMode = ColorMode.Gradient; }
+        }
+        protected GradientTheme.Theme? _MouseDownTheme = null;
+
+        [Category("Theme")]
+        public GradientTheme.Theme MouseEnterTheme
+        {
+            get { return _MouseEnterTheme ?? _Theme; }
+            set { _MouseEnterTheme = value; _ColorMode = ColorMode.Gradient; }
+        }
+        protected GradientTheme.Theme? _MouseEnterTheme = null;
+
+        [Category("Theme")]
+        public GradientTheme.Theme MouseLeaveTheme
+        {
+            get { return _MouseLeaveTheme ?? _Theme; }
+            set { _MouseLeaveTheme = value; _ColorMode = ColorMode.Gradient; }
+        }
+        protected GradientTheme.Theme? _MouseLeaveTheme = null;
+
+        [Category("Theme")]
         [Browsable(true)]
         [Description("Colors used for Gradient Color Mode")]
         public GradientColor[] GradientColorList
         {
-            get { return _BackColorList; }
-            set { _BackColorList = value; _ColorMode = ColorMode.Gradient; Invalidate(); }
+            get
+            {
+                if (ThemeInUse == GradientTheme.Theme.Custom)
+                    return _GradientColorList;
+                else
+                    return (_GradientColorList = GradientTheme.GetTheme(ThemeInUse));
+            }
+            set { _GradientColorList = value; _ColorMode = ColorMode.Gradient; Invalidate(); }
         }
-        protected GradientColor[] _BackColorList;
+        protected GradientColor[] _GradientColorList;
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -67,6 +115,41 @@ namespace NET__Custom_Controls.BasicElements
                         ColorMode = ColorMode.Solid;
                     break;
             }
+        }
+
+        protected void EnableThemeEffectsOnMouseEvents()
+        {
+            OnMouseEnter(GradientEvent_MouseEnter, this);
+            OnMouseEnter(GradientEvent_MouseEnter, Controls);
+
+            OnMouseDown(GradientEvent_MouseDown, this);
+            OnMouseDown(GradientEvent_MouseDown, Controls);
+
+            OnMouseUp(GradientEvent_MouseUp, this);
+            OnMouseUp(GradientEvent_MouseUp, Controls);
+
+            OnMouseLeave(GradientEvent_MouseLeave, this);
+            OnMouseLeave(GradientEvent_MouseLeave, Controls);
+        }
+        protected void GradientEvent_MouseEnter(object sender, EventArgs e)
+        {
+            ThemeInUse = MouseEnterTheme;
+            Invalidate();
+        }
+        protected void GradientEvent_MouseDown(object sender, MouseEventArgs e)
+        {
+            ThemeInUse = MouseDownTheme;
+            Invalidate();
+        }
+        protected void GradientEvent_MouseUp(object sender, MouseEventArgs e)
+        {
+            ThemeInUse = MouseUpTheme;
+            Invalidate();
+        }
+        protected void GradientEvent_MouseLeave(object sender, EventArgs e)
+        {
+            ThemeInUse = MouseLeaveTheme;
+            Invalidate();
         }
     }
 }
