@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace NET__Custom_Controls.Buttons
 {
+    [ToolboxItem(true)]
     [DefaultEvent("Click")]
     public partial class Button : BasicElements.GradientElement
     {

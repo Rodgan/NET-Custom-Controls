@@ -91,6 +91,12 @@ namespace NET__Custom_Controls.Email
         [Category("Logs")]
         public string LogFilePath { get; set; } = @"C:\net_email_sender_log.txt";
 
+        private string Logs = "";
+        public string GetLastLog()
+        {
+            return Logs;
+        }
+
         public bool Send()
         {
             NET_Email_Sender.SMTP smtp_server;
@@ -114,6 +120,8 @@ namespace NET__Custom_Controls.Email
                 email.AddAttachment(Attachments);
 
             var emailSent = smtp_server.SendEmail(email);
+
+            Logs = string.Join(Environment.NewLine, smtp_server.Log);
 
             if (SaveLogFile)
                 smtp_server.SaveLogFile(LogFilePath);

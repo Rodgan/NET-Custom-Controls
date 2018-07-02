@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 
 namespace NET__Custom_Controls.Panel
 {
+    [ToolboxItem(true)]
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design", typeof(IDesigner))]
     public partial class Panel : BasicElements.GradientElement
     {

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace NET__Custom_Controls.Loading
 {
+
     public partial class ProgressBar : BasicElements.GradientElement
     {
         public ProgressBar()
@@ -36,7 +37,7 @@ namespace NET__Custom_Controls.Loading
         {
             var widthToDraw = (int) ((Width / 100f) * Progress);
 
-            lblPercentage.Text = $"{Progress} %";
+            lblPercentage.Text = $"{Progress.ToString("0.00")} %";
 
             if (widthToDraw == 0)
                 return;

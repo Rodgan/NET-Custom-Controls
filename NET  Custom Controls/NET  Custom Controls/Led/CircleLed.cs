@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace NET__Custom_Controls.Led
 {
+    [ToolboxItem(true)]
     [DefaultEvent("Click")]
     public partial class CircleLed : BasicElements.GradientElement
     {
@@ -18,6 +19,7 @@ namespace NET__Custom_Controls.Led
             OldSize = Size;
             SetInitialTheme();
             SetDefaultEvents();
+            EnableThemeEffectsOnMouseEvents();
         }
 
         private void SetInitialTheme()
