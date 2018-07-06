@@ -118,6 +118,12 @@
     <Compile Include="Loading\ProgressBar.Designer.cs">
       <DependentUpon>ProgressBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Panel\Navigator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panel\Navigator.Designer.cs">
+      <DependentUpon>Navigator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Panel\Panel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -153,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Loading\ProgressBar.resx">
       <DependentUpon>ProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panel\Navigator.resx">
+      <DependentUpon>Navigator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panel\Panel.resx">
       <DependentUpon>Panel.cs</DependentUpon>
