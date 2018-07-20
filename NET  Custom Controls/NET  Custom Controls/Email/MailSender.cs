@@ -76,6 +76,14 @@ namespace NET__Custom_Controls.Email
 
         [Category("Email")]
         [Browsable(true)]
+        public bool DeliveryNotification { get; set; } = false;
+
+        [Category("Email")]
+        [Browsable(true)]
+        public bool ReadingNotification { get; set; } = false;
+
+        [Category("Email")]
+        [Browsable(true)]
         public string Subject { get; set; }
         
         [Category("Email")]
@@ -114,7 +122,7 @@ namespace NET__Custom_Controls.Email
                 To != null ? string.Join(";", To) : null,
                 Cc != null ? string.Join(";", Cc) : null,
                 Bcc != null ? string.Join(";", Bcc) : null, 
-                ReplyTo, Subject, Body, emailType);
+                ReplyTo, DeliveryNotification, ReadingNotification, Subject, Body, emailType);
 
             if (Attachments != null && Attachments.Length > 0)
                 email.AddAttachment(Attachments);
