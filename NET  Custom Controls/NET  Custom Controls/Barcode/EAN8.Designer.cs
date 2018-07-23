@@ -1,6 +1,6 @@
-﻿namespace NET__Custom_Controls.BasicElements
+﻿namespace NET__Custom_Controls.Barcode
 {
-    partial class BarcodeElement
+    partial class EAN8
     {
         /// <summary> 
         /// Variabile di progettazione necessaria.
@@ -30,14 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // BarcodeElement
+            // EAN8
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 22F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.Name = "BarcodeElement";
-            this.Size = new System.Drawing.Size(378, 70);
+            this.Name = "EAN8";
+            this.Size = new System.Drawing.Size(187, 66);
             this.ResumeLayout(false);
 
         }

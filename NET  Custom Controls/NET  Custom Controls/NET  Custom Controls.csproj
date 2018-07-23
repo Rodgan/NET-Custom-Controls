@@ -74,6 +74,12 @@
     <Compile Include="Barcode\EAN13.Designer.cs">
       <DependentUpon>EAN13.cs</DependentUpon>
     </Compile>
+    <Compile Include="Barcode\EAN8.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Barcode\EAN8.Designer.cs">
+      <DependentUpon>EAN8.cs</DependentUpon>
+    </Compile>
     <Compile Include="BasicElements\BarcodeElement.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -153,6 +159,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Barcode\EAN13.resx">
       <DependentUpon>EAN13.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Barcode\EAN8.resx">
+      <DependentUpon>EAN8.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BasicElements\BarcodeElement.resx">
       <DependentUpon>BarcodeElement.cs</DependentUpon>

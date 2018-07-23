@@ -12,15 +12,13 @@ using NET__Custom_Controls.BasicElements;
 namespace NET__Custom_Controls.Barcode
 {
     [ToolboxItem(true)]
-    public partial class EAN13 : BarcodeElement
+    public partial class EAN8 : BarcodeElement
     {
-        public EAN13()
+        public EAN8()
         {
             InitializeComponent();
-            CurrentBarcodeType = BarcodeType.EAN13;
-            SetMargin(11, 1, 7, 1);
+            CurrentBarcodeType = BarcodeType.EAN8;
+            SetMargin(7, 1, 7, 1);
         }
-        
-
     }
 }

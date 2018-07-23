@@ -17,6 +17,7 @@ namespace NET__Custom_Controls.BasicElements
         protected enum BarcodeType
         {
             None,
+            EAN8,
             EAN13
         }
 
@@ -27,6 +28,20 @@ namespace NET__Custom_Controls.BasicElements
             Stop,
             Normal
         }
+
+        private int CurrentLinePositionX = 0;
+        private int CurrentLinePositionY = 0;
+        private int MaxBarcodeWidth = 0;
+        private int MaxBarcodeHeight = 0;
+
+        private int StartLeftControlBar = 0;
+        private int EndLeftControlBar = 0;
+
+        private int StartCenterControlBar = 0;
+        private int EndCenterControlBar = 0;
+
+        private int StartRightControlBar = 0;
+        private int EndRightControlBar = 0;
 
         public BarcodeElement()
         {
@@ -78,34 +93,34 @@ namespace NET__Custom_Controls.BasicElements
         [Category("Barcode Margin")]
         public int MarginTop
         {
-            get { return _MarginTop; }
+            get { return _MarginTop * BarWidth; }
             set { _MarginTop = value; Invalidate(); }
         }
-        private int _MarginTop = 5;
+        private int _MarginTop = 1;
 
         [Category("Barcode Margin")]
         public int MarginLeft
         {
-            get { return _MarginLeft; }
+            get { return _MarginLeft * BarWidth; }
             set { _MarginLeft = value; Invalidate(); }
         }
-        private int _MarginLeft = 5;
+        private int _MarginLeft = 1;
 
         [Category("Barcode Margin")]
         public int MarginRight
         {
-            get { return _MarginRight; }
+            get { return _MarginRight * BarWidth; }
             set { _MarginRight = value; Invalidate(); }
         }
-        private int _MarginRight = 5;
+        private int _MarginRight = 1;
 
         [Category("Barcode Margin")]
         public int MarginBottom
         {
-            get { return _MarginBottom; }
+            get { return _MarginBottom * BarWidth; }
             set { _MarginBottom = value; Invalidate(); }
         }
-        private int _MarginBottom = 5;
+        private int _MarginBottom = 1;
 
         [Category("Barcode")]
         public string Barcode
@@ -115,7 +130,23 @@ namespace NET__Custom_Controls.BasicElements
         }
         private string _Barcode;
 
-        protected bool ValidateBarcode(string barcode)
+        [Category("Appearance")]
+        [Browsable(true)]
+        public override Font Font
+        {
+            get { return _Font; }
+            set { _Font = value; Invalidate(); }
+        }
+        private Font _Font;
+
+        protected void SetMargin(int left, int top, int right, int bottom)
+        {
+            MarginLeft = left;
+            MarginTop = top;
+            MarginRight = right;
+            MarginBottom = bottom;
+        }
+        private bool ValidateBarcode(string barcode)
         {
             if (string.IsNullOrEmpty(barcode))
                 return false;
@@ -125,30 +156,37 @@ namespace NET__Custom_Controls.BasicElements
                 case BarcodeType.EAN13:
                     if (!Regex.IsMatch(barcode, "^[0-9]{13}$"))
                         return false;
+                    return IsCheckDigitValid(barcode, 1);
 
-                    int multiplier = 1;
-                    int sum = 0;
-                    int currentCheckDigit = int.Parse(barcode[12].ToString());
-
-                    for (var i = 0; i < 12; i++)
-                    {
-                        int digit = int.Parse(barcode[i].ToString());
-                        sum += (digit * multiplier);
-                        multiplier = multiplier == 1 ? 3 : 1;
-                    }
-
-                    int calculatedCheckDigit = 10 - (sum % 10);
-
-                    if (calculatedCheckDigit == 10)
-                        calculatedCheckDigit = 0;
-
-                    return calculatedCheckDigit == currentCheckDigit;
+                case BarcodeType.EAN8:
+                    if (!Regex.IsMatch(barcode, "^[0-9]{8}$"))
+                        return false;
+                    return IsCheckDigitValid(barcode, 3);
                 default:
                     return false;
             }
         }
+        protected bool IsCheckDigitValid(string barcode, int multiplier)
+        {
+            int sum = 0;
+            int currentCheckDigit = int.Parse(barcode.Last().ToString());
 
-        protected void DrawEAN13(PaintEventArgs e)
+            for (var i = 0; i < barcode.Length - 1; i++)
+            {
+                int digit = int.Parse(barcode[i].ToString());
+                sum += (digit * multiplier);
+                multiplier = multiplier == 1 ? 3 : 1;
+            }
+
+            int calculatedCheckDigit = 10 - (sum % 10);
+
+            if (calculatedCheckDigit == 10)
+                calculatedCheckDigit = 0;
+
+            return calculatedCheckDigit == currentCheckDigit;
+        }
+
+        private void DrawEAN13(PaintEventArgs e)
         {
             string[] codeR = new string[] {
                 "1110010", "1100110", "1101100", "1000010", "1011100",
@@ -170,10 +208,6 @@ namespace NET__Custom_Controls.BasicElements
                 "LGGLLG", "LGGGLL", "LGLGLG", "LGLGGL", "LGGLGL"
             };
 
-            string start = "101";
-            string center = "01010";
-            string stop = "101";
-
             // Example 2 412345 678901
             // firstDigit = 2
             // firstSixDigits = 412345
@@ -184,7 +218,7 @@ namespace NET__Custom_Controls.BasicElements
             string lastSixDigits = Barcode.Substring(7,6);
 
             // Draw START
-            DrawBar(start, PatternType.Start, e);
+            DrawLeftControlBar(e);
 
             // Draw First Six Digits
             for (var i = 0; i < firstSixDigits.Length; i++)
@@ -203,7 +237,7 @@ namespace NET__Custom_Controls.BasicElements
                 DrawBar(barPattern, PatternType.Normal, e);
             }
             // Draw Center
-            DrawBar(center, PatternType.Center, e);
+            DrawCenterControlBar(e);
 
             // Draw Last Six Digits
             for (var i = 0; i < lastSixDigits.Length; i++)
@@ -214,15 +248,69 @@ namespace NET__Custom_Controls.BasicElements
                 DrawBar(barPattern, PatternType.Normal, e);
             }
             // Draw Stop
-            DrawBar(stop, PatternType.Stop, e);
+            DrawRightControlBar(e);
+        }
+        private void DrawEAN8(PaintEventArgs e)
+        {
+            string[] codeR = new string[] {
+                "1110010", "1100110", "1101100", "1000010", "1011100",
+                "1001110", "1010000", "1000100", "1001000", "1110100"
+            };
+
+            string[] codeL = new string[]{
+                "0001101", "0011001", "0010011", "0111101", "0100011",
+                "0110001", "0101111", "0111011", "0110111", "0001011"
+            };
+
+            string firstFourDigits = Barcode.Substring(0,4);
+            string lastFourDigits = Barcode.Substring(4,4);
+
+
+            // Draw START
+            DrawLeftControlBar(e);
+
+            // Draw First Four Digits
+            for (var i = 0; i < firstFourDigits.Length; i++)
+            {
+                int currentDigit = int.Parse(firstFourDigits[i].ToString());
+                string barPattern = codeL[currentDigit];
+
+                DrawBar(barPattern, PatternType.Normal, e);
+            }
+            // Draw Center
+            DrawCenterControlBar(e);
+
+            // Draw Last Four Digits
+            for (var i = 0; i < lastFourDigits.Length; i++)
+            {
+                int currentDigit = int.Parse(lastFourDigits[i].ToString());
+                string barPattern = codeR[currentDigit];
+
+                DrawBar(barPattern, PatternType.Normal, e);
+            }
+            // Draw Stop
+            DrawRightControlBar(e);
         }
 
-        private int CurrentLinePositionX = 0;
-        private int CurrentLinePositionY = 0;
-        private int MaxBarcodeWidth = 0;
-        private int MaxBarcodeHeight = 0;
-
-        protected void DrawBar(string pattern, PatternType patternType, PaintEventArgs e)
+        private void DrawLeftControlBar(PaintEventArgs e, string pattern = "101")
+        {
+            StartLeftControlBar = CurrentLinePositionX + BarWidth;
+            DrawBar(pattern, PatternType.Start, e);
+            EndLeftControlBar = CurrentLinePositionX - BarWidth;
+        }
+        private void DrawCenterControlBar(PaintEventArgs e , string pattern = "01010")
+        {
+            StartCenterControlBar = CurrentLinePositionX + BarWidth;
+            DrawBar(pattern, PatternType.Center, e);
+            EndCenterControlBar = CurrentLinePositionX - BarWidth;
+        }
+        private void DrawRightControlBar(PaintEventArgs e, string pattern = "101")
+        {
+            StartRightControlBar = CurrentLinePositionX + BarWidth;
+            DrawBar(pattern, PatternType.Stop, e);
+            EndRightControlBar = CurrentLinePositionX - BarWidth;
+        }
+        private void DrawBar(string pattern, PatternType patternType, PaintEventArgs e)
         {
 
             for (var i = 0; i < pattern.Length; i++)
@@ -252,8 +340,9 @@ namespace NET__Custom_Controls.BasicElements
 
                     if (currentDigit == '1')
                     {
-                        if (MaxBarcodeHeight < CurrentLinePositionY + height)
-                            MaxBarcodeHeight = CurrentLinePositionY + height;
+                        var textSize = MeasureText("0");
+                        if (MaxBarcodeHeight < CurrentLinePositionY + height + textSize.Height)
+                            MaxBarcodeHeight = CurrentLinePositionY + height + textSize.Height;
 
                         e.Graphics.DrawLine(Pens.Black, new Point(CurrentLinePositionX, CurrentLinePositionY), new Point(CurrentLinePositionX, CurrentLinePositionY + height));
                     }
@@ -264,13 +353,39 @@ namespace NET__Custom_Controls.BasicElements
             }
 
         }
+        private void DrawCode(PaintEventArgs e)
+        {
+            switch (CurrentBarcodeType)
+            {
+                case BarcodeType.EAN13:
+                    char firstDigit = Barcode[0];
+                    string firstSixDigits = Barcode.Substring(1,6);
+                    string lastSixDigits = Barcode.Substring(7,6);
 
-        protected void DrawError(PaintEventArgs e)
+                    e.Graphics.DrawString(firstDigit.ToString(), Font, Brushes.Black, FirstDigitBeforeLeftControlPoint(firstDigit));
+                    e.Graphics.DrawString(firstSixDigits, Font, Brushes.Black, FirstGroupOfDigitsPoint(firstSixDigits));
+                    e.Graphics.DrawString(lastSixDigits, Font, Brushes.Black, LastGroupOfDigitsPoint(lastSixDigits));
+                    break;
+
+                case BarcodeType.EAN8:
+                    string firstFourDigits = Barcode.Substring(0,4);
+                    string lastFourDigits = Barcode.Substring(4,4);
+
+                    e.Graphics.DrawString(firstFourDigits, Font, Brushes.Black, FirstGroupOfDigitsPoint(firstFourDigits));
+                    e.Graphics.DrawString(lastFourDigits, Font, Brushes.Black, LastGroupOfDigitsPoint(lastFourDigits));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        private void DrawError(PaintEventArgs e)
         {
             e.Graphics.DrawLine(new Pen(Color.Red,2), new Point(0, 0), new Point(Width, Height));
             e.Graphics.DrawLine(new Pen(Color.Red,2), new Point(Width, 0), new Point(0, Height));
             e.Graphics.DrawRectangle(new Pen(Color.Black, 2), e.ClipRectangle);
         }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.Clear(Color.White);
@@ -288,9 +403,14 @@ namespace NET__Custom_Controls.BasicElements
                     case BarcodeType.EAN13:
                         DrawEAN13(e);
                         break;
+                    case BarcodeType.EAN8:
+                        DrawEAN8(e);
+                        break;
                     default:
                         break;
                 }
+
+                DrawCode(e);
 
                 Width = MaxBarcodeWidth + MarginLeft + MarginRight;
                 Height = MaxBarcodeHeight + MarginTop + MarginBottom;
@@ -300,6 +420,31 @@ namespace NET__Custom_Controls.BasicElements
                 DrawError(e);
             }
 
+        }
+
+        private Size MeasureText(string text)
+        {
+            return TextRenderer.MeasureText(text, Font);
+        }
+        private Point FirstDigitBeforeLeftControlPoint(char digit)
+        {
+            return new Point(StartLeftControlBar - MeasureText(digit.ToString()).Width, BarHeight + MarginTop);
+        }
+        private Point FirstGroupOfDigitsPoint(string digits)
+        {
+            var controlBarDistance = StartCenterControlBar - EndLeftControlBar;
+            var textSize = MeasureText(digits);
+            var margin = (controlBarDistance - textSize.Width) / 2;
+
+            return new Point(EndLeftControlBar + margin, BarHeight + MarginTop);
+        }
+        private Point LastGroupOfDigitsPoint(string digits)
+        {
+            var controlBarDistance = StartRightControlBar - EndCenterControlBar;
+            var textSize = MeasureText(digits);
+            var margin = (controlBarDistance - textSize.Width) / 2;
+
+            return new Point(EndCenterControlBar + margin, BarHeight + MarginTop);
         }
     }
 }
