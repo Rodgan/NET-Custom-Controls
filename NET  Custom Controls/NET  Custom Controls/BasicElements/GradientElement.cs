@@ -103,6 +103,31 @@ namespace NET__Custom_Controls.BasicElements
         }
         protected GradientColor[] _GradientColorList;
 
+        [Browsable(true)]
+        [Category("Appearance")]
+        public Image Image
+        {
+            get { return _Image; }
+            set { _Image = value; Invalidate(); }
+        }
+        private Image _Image;
+
+        [Category("Appearance")]
+        public ImageAlignment ImageAlignment
+        {
+            get { return _ImageAlignment; }
+            set { _ImageAlignment = value; Invalidate(); }
+        }
+        private ImageAlignment _ImageAlignment = ImageAlignment.MiddleCenter;
+
+        [Category("Appearance")]
+        public bool AdaptImage
+        {
+            get { return _AdaptImage; }
+            set { _AdaptImage = value; Invalidate(); }
+        }
+        private bool _AdaptImage = true;
+
         protected override void OnPaint(PaintEventArgs e)
         {
             switch (ColorMode)
@@ -115,6 +140,9 @@ namespace NET__Custom_Controls.BasicElements
                         ColorMode = ColorMode.Solid;
                     break;
             }
+
+            if (Image != null)
+                Designer.DrawImage(this, e, Image, ImageAlignment, AdaptImage);
         }
 
         protected void EnableThemeEffectsOnMouseEvents()

@@ -18,7 +18,19 @@ namespace NET__Custom_Controls
         Rectangle,
         Pie
     }
-
+    public enum ImageAlignment
+    {
+        BottomLeft,
+        BottomCenter,
+        BottomRight,
+        MiddleLeft,
+        MiddleCenter,
+        MiddleRight,
+        TopLeft,
+        TopCenter,
+        TopRight,
+        Fill
+    }
     public class Designer
     {
         private static bool FillGradient(PaintEventArgs e, GradientColor[] colors, LinearGradientMode direction, Shape shape, Rectangle? rectangle = null, float startAngle = 0, float sweepAngle = 0)
@@ -90,6 +102,108 @@ namespace NET__Custom_Controls
         public static void FillPieSolid(PaintEventArgs e, Color color, float startAngle, float sweepAngle, Rectangle? rectangle = null)
         {
             FillSolid(e, color, Shape.Pie, rectangle, startAngle, sweepAngle);
+        }
+
+        public static void DrawImage(object sender, PaintEventArgs e, Image image, ImageAlignment alignment, bool adaptImage)
+        {
+            UserControl control = (UserControl)sender;
+            int
+                x = 0,
+                y = 0,
+                controlHeight = control.Height,
+                controlWidth = control.Width,
+                imageHeight = image.Height,
+                imageWidth = image.Width;
+
+            float aspectRatio = (float) image.Width / image.Height;
+
+            Size adaptedSize = new Size(imageWidth, imageHeight);
+
+            if (adaptImage)
+            {
+                adaptedSize = AdaptImage(image, new Size(controlWidth, controlHeight));
+                imageWidth = adaptedSize.Width;
+                imageHeight = adaptedSize.Height;
+            }
+
+            switch (alignment)
+            {
+                case ImageAlignment.BottomLeft:
+                    x = 0;
+                    y = controlHeight - imageHeight;
+                    break;
+                case ImageAlignment.BottomCenter:
+                    x = (controlWidth / 2) - (imageWidth / 2);
+                    y = controlHeight - imageHeight;
+                    break;
+                case ImageAlignment.BottomRight:
+                    x = controlWidth - imageWidth;
+                    y = controlHeight - imageHeight;
+                    break;
+
+                case ImageAlignment.MiddleLeft:
+                    x = 0;
+                    y = (controlHeight / 2) - (imageHeight /2);
+                    break;
+                case ImageAlignment.MiddleCenter:
+                    x = (controlWidth / 2) - (imageWidth / 2);
+                    y = (controlHeight / 2) - (imageHeight / 2);
+                    break;
+                case ImageAlignment.MiddleRight:
+                    x = controlWidth - imageWidth;
+                    y = (controlHeight / 2) - (imageHeight / 2);
+                    break;
+
+                case ImageAlignment.TopLeft:
+                    x = 0;
+                    y = 0;
+                    break;
+                case ImageAlignment.TopCenter:
+                    x = (controlWidth / 2) - (imageWidth / 2);
+                    y = 0;
+                    break;
+                case ImageAlignment.TopRight:
+                    x = controlWidth - imageWidth;
+                    y = 0;
+                    break;
+
+                case ImageAlignment.Fill:
+                    x = 0;
+                    y = 0;
+                    imageWidth = imageWidth >= controlWidth ? controlWidth : imageWidth;
+                    imageHeight = imageHeight >= controlHeight ? controlHeight : imageHeight;
+                    break;
+            }
+            
+            e.Graphics.DrawImage(image, new Rectangle(x,y, adaptedSize.Width, adaptedSize.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
+        }
+
+        private static Size AdaptImage(Image originalImage, Size maxSize)
+        {
+            Size newSize = new Size(maxSize.Width, maxSize.Height);
+            float originalAspectRatio = AspectRatio(originalImage.Size);
+            float adaptedAspectRatio = AspectRatio(newSize);
+
+            if (originalAspectRatio != adaptedAspectRatio)
+            {
+                while (true)
+                {
+                    newSize.Height--;
+                    newSize.Width = (int) (newSize.Height * originalAspectRatio);
+
+                    if (newSize.Height <= maxSize.Height && newSize.Width <= maxSize.Width)
+                        return newSize;
+                }
+                
+            }
+
+            return newSize;
+    
+        }
+
+        private static float AspectRatio(Size size)
+        {
+            return (float)size.Width / size.Height;
         }
     }
 
