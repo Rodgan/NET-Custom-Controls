@@ -88,17 +88,14 @@ namespace NET__Custom_Controls
         {
             return FillGradient(e, colors, direction, Shape.Rectangle, rectangle);
         }
-
         public static bool FillPieGradient(PaintEventArgs e, GradientColor[] colors, LinearGradientMode direction, float startAngle, float sweepAngle, Rectangle? rectangle = null)
         {
             return FillGradient(e, colors, direction, Shape.Pie, rectangle, startAngle, sweepAngle);
         }
-        
         public static void FillRectangleSolid(PaintEventArgs e, Color color, Rectangle? rectangle = null)
         {
             FillSolid(e, color, Shape.Rectangle, rectangle);
         }
-
         public static void FillPieSolid(PaintEventArgs e, Color color, float startAngle, float sweepAngle, Rectangle? rectangle = null)
         {
             FillSolid(e, color, Shape.Pie, rectangle, startAngle, sweepAngle);
@@ -170,8 +167,12 @@ namespace NET__Custom_Controls
                 case ImageAlignment.Fill:
                     x = 0;
                     y = 0;
-                    imageWidth = imageWidth >= controlWidth ? controlWidth : imageWidth;
-                    imageHeight = imageHeight >= controlHeight ? controlHeight : imageHeight;
+                    
+                    if (!adaptImage)
+                    {
+                        adaptedSize.Width = controlWidth;
+                        adaptedSize.Height = controlHeight;
+                    }
                     break;
             }
             
@@ -180,7 +181,7 @@ namespace NET__Custom_Controls
 
         private static Size AdaptImage(Image originalImage, Size maxSize)
         {
-            Size newSize = new Size(maxSize.Width, maxSize.Height);
+            Size newSize = new Size(Min(originalImage.Width, maxSize.Width), Min(originalImage.Height, maxSize.Height));
             float originalAspectRatio = AspectRatio(originalImage.Size);
             float adaptedAspectRatio = AspectRatio(newSize);
 
@@ -200,7 +201,14 @@ namespace NET__Custom_Controls
             return newSize;
     
         }
-
+        private static int Max(params int[] nums)
+        {
+            return nums.Max();
+        }
+        private static int Min(params int[] nums)
+        {
+            return nums.Min();
+        }
         private static float AspectRatio(Size size)
         {
             return (float)size.Width / size.Height;
