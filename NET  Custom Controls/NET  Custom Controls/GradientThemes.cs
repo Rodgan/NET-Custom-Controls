@@ -33,10 +33,20 @@ namespace NET__Custom_Controls
             Sprite,
             Sunrise,
             Titanium,
+            VisualStudioDark,
             WhiteApple,
             YouTube
         }
         
+        public static void ReverseGradient(GradientColor[] source)
+        {
+            GradientColor[] copy = source.Select(x => new GradientColor { Color = x.Color, Position = x.Position }).ToArray();
+
+            for (var i = 0; i < source.Length; i++)
+            {
+                source[i].Color = copy[copy.Length - (i + 1)].Color;
+            }
+        }
         public static GradientColor[] GetTheme(Theme theme)
         {
             switch (theme)
@@ -89,6 +99,8 @@ namespace NET__Custom_Controls
                     return Rainbow;
                 case Theme.Netflix:
                     return Netflix;
+                case Theme.VisualStudioDark:
+                    return VisualStudioDark;
                 case Theme.Custom:
                 default:
                     return null;
@@ -363,6 +375,17 @@ namespace NET__Custom_Controls
                 return new GradientColor[] {
                     new GradientColor() { Color = Color.FromArgb(142,14,0), Position = 0 },
                     new GradientColor() { Color = Color.FromArgb(31,28,24), Position = 1},
+                };
+            }
+        }
+
+        public static GradientColor[] VisualStudioDark
+        {
+            get
+            {
+                return new GradientColor[] {
+                    new GradientColor() { Color = Color.FromArgb(45, 45, 48), Position = 0 },
+                    new GradientColor() { Color = Color.FromArgb(53, 53, 57), Position = 1},
                 };
             }
         }

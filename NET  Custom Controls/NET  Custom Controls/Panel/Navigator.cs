@@ -20,7 +20,7 @@ namespace NET__Custom_Controls.Panel
             InitializeComponent();
         }
 
-        public void DrawPage(Form page)
+        public void NavigateTo(Form page)
         {
             this.Controls.Clear();
             page.TopLevel = false;

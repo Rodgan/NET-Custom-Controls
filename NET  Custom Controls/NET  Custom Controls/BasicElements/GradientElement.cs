@@ -28,6 +28,76 @@ namespace NET__Custom_Controls.BasicElements
         }
         protected ColorMode _ColorMode = ColorMode.Solid;
 
+        #region Theme Reversion
+        [Category("Theme Reversion")]
+        [Description("Reverse gradient color")]
+        public bool ReverseTheme
+        {
+            get { return _ReverseTheme; }
+            set { _ReverseTheme = value; Invalidate(); }
+        }
+        private bool _ReverseTheme = false;
+
+        [Category("Theme Reversion")]
+        [Description("Reverse gradient color On Mouse Leave")]
+        public bool ReverseThemeOnMouseLeave
+        {
+            get { return _ReverseThemeOnMouseLeave; }
+            set { _ReverseThemeOnMouseLeave = value; Invalidate(); }
+        }
+        private bool _ReverseThemeOnMouseLeave = false;
+
+        [Category("Theme Reversion")]
+        [Description("Reverse gradient color On Mouse Enter")]
+        public bool ReverseThemeOnMouseEnter
+        {
+            get { return _ReverseThemeOnMouseEnter; }
+            set { _ReverseThemeOnMouseEnter = value; Invalidate(); }
+        }
+        private bool _ReverseThemeOnMouseEnter = false;
+
+        [Category("Theme Reversion")]
+        [Description("Reverse gradient color On Mouse Up")]
+        public bool ReverseThemeOnMouseUp
+        {
+            get { return _ReverseThemeOnMouseUp; }
+            set { _ReverseThemeOnMouseUp = value; Invalidate(); }
+        }
+        private bool _ReverseThemeOnMouseUp = false;
+
+        [Category("Theme Reversion")]
+        [Description("Reverse gradient color On Mouse Down")]
+        public bool ReverseThemeOnMouseDown
+        {
+            get { return _ReverseThemeOnMouseDown; }
+            set { _ReverseThemeOnMouseDown = value; Invalidate(); }
+        }
+        private bool _ReverseThemeOnMouseDown = false;
+        #endregion
+
+        [Category("Theme")]
+        [Browsable(true)]
+        [Description("Colors used for Gradient Color Mode")]
+        public GradientColor[] GradientColorList
+        {
+            get
+            {
+                if (ThemeInUse != GradientTheme.Theme.Custom)
+                    _GradientColorList = GradientTheme.GetTheme(ThemeInUse);
+
+                if (ReverseTheme)
+                {
+                    GradientTheme.ReverseGradient(_GradientColorList);
+
+                    return _GradientColorList;
+                }
+                else
+                    return _GradientColorList;
+            }
+            set { _GradientColorList = value; _ColorMode = ColorMode.Gradient; Invalidate(); }
+        }
+        protected GradientColor[] _GradientColorList;
+
         [Category("Theme")]
         [Description("Select Color Direction for Gradient Color Mode")]
         public LinearGradientMode GradientColorDirection
@@ -54,7 +124,7 @@ namespace NET__Custom_Controls.BasicElements
         }
         protected GradientTheme.Theme _Theme = GradientTheme.Theme.Custom;
 
-
+        #region Mouse Event Theme
         [Category("Theme")]
         public GradientTheme.Theme MouseUpTheme
         {
@@ -86,23 +156,9 @@ namespace NET__Custom_Controls.BasicElements
             set { _MouseLeaveTheme = value; _ColorMode = ColorMode.Gradient; }
         }
         protected GradientTheme.Theme? _MouseLeaveTheme = null;
+        #endregion
 
-        [Category("Theme")]
-        [Browsable(true)]
-        [Description("Colors used for Gradient Color Mode")]
-        public GradientColor[] GradientColorList
-        {
-            get
-            {
-                if (ThemeInUse == GradientTheme.Theme.Custom)
-                    return _GradientColorList;
-                else
-                    return (_GradientColorList = GradientTheme.GetTheme(ThemeInUse));
-            }
-            set { _GradientColorList = value; _ColorMode = ColorMode.Gradient; Invalidate(); }
-        }
-        protected GradientColor[] _GradientColorList;
-
+        #region Image
         [Browsable(true)]
         [Category("Appearance")]
         public Image Image
@@ -127,6 +183,7 @@ namespace NET__Custom_Controls.BasicElements
             set { _AdaptImage = value; Invalidate(); }
         }
         private bool _AdaptImage = true;
+        #endregion
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -161,21 +218,25 @@ namespace NET__Custom_Controls.BasicElements
         }
         protected void GradientEvent_MouseEnter(object sender, EventArgs e)
         {
+            _ReverseTheme = ReverseThemeOnMouseEnter;
             ThemeInUse = MouseEnterTheme;
             Invalidate();
         }
         protected void GradientEvent_MouseDown(object sender, MouseEventArgs e)
         {
+            _ReverseTheme = _ReverseThemeOnMouseDown;
             ThemeInUse = MouseDownTheme;
             Invalidate();
         }
         protected void GradientEvent_MouseUp(object sender, MouseEventArgs e)
         {
+            _ReverseTheme = _ReverseThemeOnMouseUp;
             ThemeInUse = MouseUpTheme;
             Invalidate();
         }
         protected void GradientEvent_MouseLeave(object sender, EventArgs e)
         {
+            _ReverseTheme = _ReverseThemeOnMouseLeave;
             ThemeInUse = MouseLeaveTheme;
             Invalidate();
         }
