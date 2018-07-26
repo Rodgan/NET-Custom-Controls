@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace NET__Custom_Controls.BasicElements
 {
@@ -341,7 +343,7 @@ namespace NET__Custom_Controls.BasicElements
                     if (currentDigit == '1')
                     {
                         var textSize = MeasureText("0");
-                        if (MaxBarcodeHeight < CurrentLinePositionY + height + textSize.Height)
+                        if (patternType == PatternType.Normal && MaxBarcodeHeight < CurrentLinePositionY + height + textSize.Height)
                             MaxBarcodeHeight = CurrentLinePositionY + height + textSize.Height;
 
                         e.Graphics.DrawLine(Pens.Black, new Point(CurrentLinePositionX, CurrentLinePositionY), new Point(CurrentLinePositionX, CurrentLinePositionY + height));
@@ -445,6 +447,17 @@ namespace NET__Custom_Controls.BasicElements
             var margin = (controlBarDistance - textSize.Width) / 2;
 
             return new Point(EndCenterControlBar + margin, BarHeight + MarginTop);
+        }
+
+        public byte[] GetBarcodeBytes()
+        {
+            Bitmap bmp = new Bitmap(Width, Height);
+            DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
+
+            MemoryStream stream = new MemoryStream();
+            bmp.Save(stream, ImageFormat.Bmp);
+
+            return stream.ToArray();
         }
     }
 }

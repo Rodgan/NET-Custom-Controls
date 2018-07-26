@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace NET__Custom_Controls.Loading
 {
-
+    [ToolboxItem(true)]
     public partial class ProgressBar : BasicElements.GradientElement
     {
         public ProgressBar()
