@@ -101,6 +101,61 @@ namespace NET__Custom_Controls
             FillSolid(e, color, Shape.Pie, rectangle, startAngle, sweepAngle);
         }
 
+        public static void DrawString(object sender, PaintEventArgs e, string value, Font font, Color color, ContentAlignment alignment)
+        {
+            UserControl control = (UserControl)sender;
+            int
+                x = 0,
+                y = 0,
+                width = control.Width,
+                height = control.Height;
+
+            Size textSize = TextRenderer.MeasureText(value, font);
+
+            switch (alignment)
+            {
+                case ContentAlignment.TopLeft:
+                    y = 0;
+                    x = 0;
+                    break;
+                case ContentAlignment.TopCenter:
+                    y = 0;
+                    x = (width / 2) - (textSize.Width / 2);
+                    break;
+                case ContentAlignment.TopRight:
+                    y = 0;
+                    x = width - textSize.Width;
+                    break;
+
+                case ContentAlignment.MiddleLeft:
+                    y = (height / 2) - (textSize.Height / 2);
+                    x = 0;
+                    break;
+                case ContentAlignment.MiddleCenter:
+                    y = (height / 2) - (textSize.Height / 2);
+                    x = (width / 2) - (textSize.Width / 2);
+                    break;
+                case ContentAlignment.MiddleRight:
+                    y = (height / 2) - (textSize.Height / 2);
+                    x = width - textSize.Width;
+                    break;
+
+                case ContentAlignment.BottomLeft:
+                    y = height - textSize.Height;
+                    x = 0;
+                    break;
+                case ContentAlignment.BottomCenter:
+                    y = height - textSize.Height;
+                    x = (width / 2) - (textSize.Width / 2);
+                    break;
+                case ContentAlignment.BottomRight:
+                    y = height - textSize.Height;
+                    x = width - textSize.Width;
+                    break;
+            }
+
+            e.Graphics.DrawString(value, font, new SolidBrush(color), new Point(x,y));
+        }
         public static void DrawImage(object sender, PaintEventArgs e, Image image, ImageAlignment alignment, bool adaptImage)
         {
             UserControl control = (UserControl)sender;

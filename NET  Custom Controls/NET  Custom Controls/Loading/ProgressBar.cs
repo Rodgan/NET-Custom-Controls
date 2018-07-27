@@ -37,20 +37,21 @@ namespace NET__Custom_Controls.Loading
         {
             var widthToDraw = (int) ((Width / 100f) * Progress);
 
-            lblPercentage.Text = $"{Progress.ToString("0.00")} %";
-
-            if (widthToDraw == 0)
-                return;
-
-            switch (ColorMode)
+            if (widthToDraw > 0)
             {
-                case ColorMode.Solid:
-                    Designer.FillRectangleSolid(e, SolidColor, new Rectangle(0, 0, widthToDraw, Height));
-                    break;
-                case ColorMode.Gradient:
-                    Designer.FillRectangleGradient(e, GradientColorList, GradientColorDirection, new Rectangle(0, 0, widthToDraw, Height));
-                    break;
+                switch (ColorMode)
+                {
+                    case ColorMode.Solid:
+                        Designer.FillRectangleSolid(e, SolidColor, new Rectangle(0, 0, widthToDraw, Height));
+                        break;
+                    case ColorMode.Gradient:
+                        Designer.FillRectangleGradient(e, GradientColorList, GradientColorDirection, new Rectangle(0, 0, widthToDraw, Height));
+                        break;
+                }
             }
+
+            Designer.DrawString(this, e, $"{Progress.ToString("0.00")} %", Font, ForeColor, ContentAlignment.MiddleCenter);
+
         }
 
         private Size OldSize;
@@ -60,6 +61,7 @@ namespace NET__Custom_Controls.Loading
                 Height = Width / 10;
             else if (OldSize.Height != Height)
                 Width = Height * 10;
+
         }
     }
 }

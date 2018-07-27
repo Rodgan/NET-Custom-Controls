@@ -16,6 +16,13 @@ namespace NET__Custom_Controls.BasicElements
     [ToolboxItem(false)]
     public partial class BarcodeElement : UserControl
     {
+        protected enum MarginType
+        {
+            Left,
+            Top,
+            Right,
+            Bottom
+        }
         protected enum BarcodeType
         {
             None,
@@ -95,7 +102,7 @@ namespace NET__Custom_Controls.BasicElements
         [Category("Barcode Margin")]
         public int MarginTop
         {
-            get { return _MarginTop * BarWidth; }
+            get { return _MarginTop; }
             set { _MarginTop = value; Invalidate(); }
         }
         private int _MarginTop = 1;
@@ -103,7 +110,7 @@ namespace NET__Custom_Controls.BasicElements
         [Category("Barcode Margin")]
         public int MarginLeft
         {
-            get { return _MarginLeft * BarWidth; }
+            get { return _MarginLeft; }
             set { _MarginLeft = value; Invalidate(); }
         }
         private int _MarginLeft = 1;
@@ -111,7 +118,7 @@ namespace NET__Custom_Controls.BasicElements
         [Category("Barcode Margin")]
         public int MarginRight
         {
-            get { return _MarginRight * BarWidth; }
+            get { return _MarginRight; }
             set { _MarginRight = value; Invalidate(); }
         }
         private int _MarginRight = 1;
@@ -119,7 +126,7 @@ namespace NET__Custom_Controls.BasicElements
         [Category("Barcode Margin")]
         public int MarginBottom
         {
-            get { return _MarginBottom * BarWidth; }
+            get { return _MarginBottom; }
             set { _MarginBottom = value; Invalidate(); }
         }
         private int _MarginBottom = 1;
@@ -388,14 +395,30 @@ namespace NET__Custom_Controls.BasicElements
             e.Graphics.DrawRectangle(new Pen(Color.Black, 2), e.ClipRectangle);
         }
 
+        private int GetMargin(MarginType type)
+        {
+            switch (type)
+            {
+                case MarginType.Left:
+                    return MarginLeft * BarWidth;
+                case MarginType.Right:
+                    return MarginRight * BarWidth;
+                case MarginType.Top:
+                    return MarginTop * BarWidth;
+                case MarginType.Bottom:
+                    return MarginBottom * BarWidth;
+                default:
+                    return 0;
+            }
+        }
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.Clear(Color.White);
 
             if (ValidateBarcode(Barcode))
             {
-                CurrentLinePositionX = MarginLeft;
-                CurrentLinePositionY = MarginTop;
+                CurrentLinePositionX = GetMargin(MarginType.Left);
+                CurrentLinePositionY = GetMargin(MarginType.Top);
 
                 MaxBarcodeHeight = 0;
                 MaxBarcodeWidth = 0;
@@ -414,8 +437,8 @@ namespace NET__Custom_Controls.BasicElements
 
                 DrawCode(e);
 
-                Width = MaxBarcodeWidth + MarginLeft + MarginRight;
-                Height = MaxBarcodeHeight + MarginTop + MarginBottom;
+                Width = MaxBarcodeWidth + GetMargin(MarginType.Left) + GetMargin(MarginType.Right);
+                Height = MaxBarcodeHeight + GetMargin(MarginType.Top) + GetMargin(MarginType.Bottom);
             }
             else
             {
