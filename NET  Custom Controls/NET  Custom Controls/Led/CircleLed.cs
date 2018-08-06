@@ -16,6 +16,7 @@ namespace NET__Custom_Controls.Led
         public CircleLed()
         {
             InitializeComponent();
+            StopVisualStudioMakingRandomChanges();
             OldSize = Size;
             SetInitialTheme();
             SetDefaultEvents();

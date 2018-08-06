@@ -240,5 +240,9 @@ namespace NET__Custom_Controls.BasicElements
             ThemeInUse = MouseLeaveTheme;
             Invalidate();
         }
+        protected void StopVisualStudioMakingRandomChanges()
+        {
+            AutoScaleMode = AutoScaleMode.None;
+        }
     }
 }

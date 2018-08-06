@@ -16,6 +16,7 @@ namespace NET__Custom_Controls.Loading
         public ProgressBar()
         {
             InitializeComponent();
+            StopVisualStudioMakingRandomChanges();
             OldSize = Size;
         }
 
