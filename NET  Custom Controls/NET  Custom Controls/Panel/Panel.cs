@@ -69,6 +69,70 @@ namespace NET__Custom_Controls.Panel
         }
         #endregion
 
+        [Category("Constraints")]
+        public int MaxWidth
+        {
+            get { return _MaxWidth; }
+            set { _MaxWidth = value; Invalidate(); }
+        }
+        private int _MaxWidth = 0;
+
+        [Category("Constraints")]
+        public int MaxHeight
+        {
+            get { return _MaxHeight; }
+            set { _MaxHeight = value; Invalidate(); }
+        }
+        private int _MaxHeight = 0;
+
+        [Category("Constraints")]
+        public bool SetMaxHeight
+        {
+            get { return _SetMaxHeight; }
+            set
+            {
+                _SetMaxHeight = value;
+
+                if (value)
+                {
+                    if (_MaxHeight == 0)
+                        _MaxHeight = Height;
+
+                    Invalidate();
+                }
+            }
+        }
+        private bool _SetMaxHeight = false;
+
+        [Category("Constraints")]
+        public bool SetMaxWidth
+        {
+            get { return _SetMaxWidth; }
+            set
+            {
+                _SetMaxWidth = value;
+                if (value)
+                {
+
+                }
+            }
+        }
+        private bool _SetMaxWidth = false;
+
+        protected override void OnResize(EventArgs e)
+        {
+            if (SetMaxWidth)
+            {
+                if (Width > MaxWidth)
+                    Width = MaxWidth;
+            }
+
+            if (SetMaxHeight)
+            {
+                if (Height > MaxHeight)
+                    Height = MaxHeight;
+            }
+        }
         //protected override void OnPaint(PaintEventArgs e)
         //{
         //    switch (ColorMode)

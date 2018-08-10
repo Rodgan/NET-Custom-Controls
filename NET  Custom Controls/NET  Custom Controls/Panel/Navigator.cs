@@ -23,12 +23,14 @@ namespace NET__Custom_Controls.Panel
         public void NavigateTo(Form page)
         {
             this.Controls.Clear();
+            
             page.TopLevel = false;
             page.Dock = DockStyle.Fill;
             page.FormBorderStyle = FormBorderStyle.None;
             page.Parent = this;
             page.Visible = true;
             page.Show();
+
         }
     }
 
