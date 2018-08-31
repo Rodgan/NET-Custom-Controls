@@ -28,26 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblText = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // lblText
-            // 
-            this.lblText.BackColor = System.Drawing.Color.Transparent;
-            this.lblText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblText.Location = new System.Drawing.Point(0, 0);
-            this.lblText.Name = "lblText";
-            this.lblText.Size = new System.Drawing.Size(197, 31);
-            this.lblText.TabIndex = 0;
-            this.lblText.Text = "Button";
-            this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Button
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.Controls.Add(this.lblText);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -58,7 +45,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblText;
     }
 }

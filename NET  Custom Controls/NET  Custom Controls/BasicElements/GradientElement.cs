@@ -185,6 +185,25 @@ namespace NET__Custom_Controls.BasicElements
         private bool _AdaptImage = true;
         #endregion
 
+
+        [Category("Appearance")]
+        public ContentAlignment TextAlign
+        {
+            get { return _TextAlign; }
+            set { _TextAlign = value; Invalidate(); }
+        }
+        private ContentAlignment _TextAlign = ContentAlignment.MiddleCenter;
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [Category("Appearance")]
+        public override string Text
+        {
+            get { return _Text; }
+            set { _Text = value; Invalidate(); }
+        }
+        private string _Text;
+
         protected override void OnPaint(PaintEventArgs e)
         {
             switch (ColorMode)
@@ -200,6 +219,9 @@ namespace NET__Custom_Controls.BasicElements
 
             if (Image != null)
                 Designer.DrawImage(this, e, Image, ImageAlignment, AdaptImage);
+
+            if (!string.IsNullOrEmpty(Text))
+                Designer.DrawString(this, e, Text, Font, ForeColor, TextAlign);
         }
 
         protected void EnableThemeEffectsOnMouseEvents()
