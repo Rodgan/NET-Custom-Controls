@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NET Email Sender">
-      <HintPath>..\..\..\NET-Email-Sender\E-Mail Sender\bin\Release\NET Email Sender.dll</HintPath>
+      <HintPath>..\References\NET Email Sender.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
